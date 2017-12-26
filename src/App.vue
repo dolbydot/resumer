@@ -17,6 +17,7 @@ import './assets/reset.css'
 import Topbar from './components/Topbar'
 import ResumeEditor from './components/ResumeEditor'
 import ResumePreview from './components/ResumePreview'
+import icons from './assets/icons'
 
 export default {
   name: 'app',
@@ -25,33 +26,34 @@ export default {
       text: 'hhhworlddddd'
     }
   },
-  components: { Topbar, ResumeEditor, ResumePreview }
+  components: { Topbar, ResumeEditor, ResumePreview },
+  created() {
+    document.body.insertAdjacentHTML('afterbegin', icons)
+  }
 }
 </script>
 
-<style>
+<style lang="scss">
 .page {
   min-width: 1024px;
   height: 100vh;
   display: flex;
   flex-direction: column;
   background: #eaebec;
-}
-
-.page>main {
-  flex-grow: 1;
-}
-
-.page>main {
-  min-width: 1024px;
-  max-width: 1440px;
-  margin-top: 16px;
-  margin-bottom: 16px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 16px;
-  width: 100%;
-  align-self: center;
+  >main {
+    flex-grow: 1;
+  }
+  >main {
+    min-width: 1024px;
+    max-width: 1440px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    width: 100%;
+    align-self: center;
+  }
 }
 
 #resumeEditor {
@@ -63,5 +65,13 @@ export default {
   flex-grow: 1;
   margin-left: 16px;
   background: #777;
+}
+
+svg.icon {
+  height: 1em;
+  width: 1em;
+  fill: currentColor;
+  vertical-align: -0.1em;
+  font-size: 16px;
 }
 </style>
