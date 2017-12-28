@@ -28,7 +28,7 @@ import getAVUser from './lib/getAVUser'
 export default {
   name: 'app',
   store,
-  components: { Topbar, ResumeEditor, ResumePreview },
+  components: { Topbar, ResumeEditor, ResumePreview},
   created() {
     document.body.insertAdjacentHTML('afterbegin', icons)
     let state = localStorage.getItem('state')
