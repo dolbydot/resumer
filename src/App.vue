@@ -28,14 +28,16 @@ import getAVUser from './lib/getAVUser'
 export default {
   name: 'app',
   store,
-  components: { Topbar, ResumeEditor, ResumePreview},
+  components: { Topbar, ResumeEditor, ResumePreview },
   created() {
     document.body.insertAdjacentHTML('afterbegin', icons)
+
     let state = localStorage.getItem('state')
     if (state) {
       state = JSON.parse(state)
     }
     this.$store.commit('initState', state)
+    
     this.$store.commit('setUser', getAVUser())
   }
 }
@@ -81,5 +83,34 @@ svg.icon {
   fill: currentColor;
   vertical-align: -0.1em;
   font-size: 16px;
+}
+
+.button {
+  width: 72px;
+  height: 32px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  background: #ddd;
+  color: #222;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  &:hover {
+    box-shadow: 1px 1px 1px hsla(0, 0, 0, .5);
+  }
+  &.primary {
+    background: #02af5f;
+    color: white;
+  }
+  &.small {
+    height: 24px;
+    font-size: inherit;
+    width: auto;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
 }
 </style>

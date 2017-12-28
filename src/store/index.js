@@ -10,47 +10,31 @@ export default new Vuex.Store({
             id: '',
             username: ''
         },
+        resumeConfig: [
+            { field: 'profile', icon: 'id', keys: ['name', 'city', 'title', 'birthday'] },
+            { field: 'workHistory', icon: 'work', type: 'array', keys: ['company', 'details'] },
+            { field: 'education', icon: 'book', type: 'array', keys: ['school', 'details'] },
+            { field: 'projects', icon: 'heart', type: 'array', keys: ['name', 'details'] },
+            { field: 'awards', icon: 'cup', type: 'array', keys: ['name', 'details'] },
+            { field: 'contacts', icon: 'phone', type: 'array', keys: ['contact', 'content'] },
+        ],
         resume: {
-            config: [
-                { field: 'profile', icon: 'id' },
-                { field: 'workHistory', icon: 'work' },
-                { field: 'education', icon: 'book' },
-                { field: 'projects', icon: 'heart' },
-                { field: 'awards', icon: 'cup' },
-                { field: 'contacts', icon: 'phone' },
-            ],
-            profile: {
-                name: '戴某某',
-                city: '武汉',
-                title: '前端攻城狮',
-                birthday: '1993-09-12'
-            },
-            'workHistory': [
-                { company: '*******公司', content: '*******' },
-                { company: '*******公司', content: '*******' },
-            ],
-            education: [
-                { school: '木叶忍者学院', content: '下忍' },
-                { school: '晓', content: '打杂' },
-            ],
-            projects: [
-                { name: 'project A', content: '文字' },
-                { name: 'project B', content: '文字' },
-            ],
-            awards: [
-                { name: 'awards A', content: '文字' },
-                { name: 'awards B', content: '文字' },
-            ],
-            contacts: [
-                { contact: 'phone', content: '13812345678' },
-                { contact: 'qq', content: '12345678' },
-            ],
-        }
 
+        }
     },
 
     mutations: {
         initState(state, payload) {
+            state.resumeConfig.map((item) => {
+                if (item.type === 'array') {
+                    Vue.set(state.resume, item.field, [])
+                } else {
+                    Vue.set(state.resume, item.field, {})
+                    item.keys.map((key) => {
+                        Vue.set(state.resume[item.field], key, '')
+                    })
+                }
+            })
             Object.assign(state, payload)
         },
         switchTab(state, payload) {
@@ -66,6 +50,16 @@ export default new Vuex.Store({
         },
         removeUser(state) {
             state.user.id = ''
+        },
+        addResumeSubfield(state, { field }) {
+            let empty = {}
+            state.resume[field].push(empty)
+            state.resumeConfig.filter((i) => i.field === field)[0].keys.map((key) => {
+                Vue.set(empty, key, '')
+            })
+        },
+        removeResumeSubfield(state, { field, index }) {
+            state.resume[field].splice(index, 1)
         }
     }
 })
