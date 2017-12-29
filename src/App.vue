@@ -1,14 +1,6 @@
 <template>
   <div>
-    <div class="page">
-      <header>
-        <Topbar/>
-      </header>
-      <main>
-        <ResumeEditor/>
-        <ResumePreview/>
-      </main>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -16,101 +8,38 @@
 import 'normalize.css/normalize.css'
 import './assets/reset.css'
 
-import Topbar from './components/Topbar'
-import ResumeEditor from './components/ResumeEditor'
-import ResumePreview from './components/ResumePreview'
 import icons from './assets/icons'
-
-import store from './store/index'
+import './assets/ui.scss'
 import AV from './lib/leancloud'
 import getAVUser from './lib/getAVUser'
 
+document.body.insertAdjacentHTML('afterbegin', icons)
+
 export default {
   name: 'app',
-  store,
-  components: { Topbar, ResumeEditor, ResumePreview },
   created() {
-    document.body.insertAdjacentHTML('afterbegin', icons)
-
-    let state = localStorage.getItem('state')
-    if (state) {
-      state = JSON.parse(state)
+    this.$store.commit('initState')//初始化resume解构
+    let user = getAVUser()
+    this.$store.commit('setUser', user)
+    if (user.id) {
+      this.$store.dispatch('fetchResume').then(() => {
+        this.restoreResumeFromLocalStorage()
+      })
+    } else {
+      this.restoreResumeFromLocalStorage()
     }
-    this.$store.commit('initState', state)
-    
-    this.$store.commit('setUser', getAVUser())
+  },
+  methods: {
+    restoreResumeFromLocalStorage() {
+      let resume = localStorage.getItem('resume')
+      if (resume) {
+        this.$store.commit('setResume', JSON.parse(resume))
+      }
+    }
   }
 }
 </script>
 
-<style lang="scss">
-.page {
-  min-width: 1024px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #eaebec;
-  >main {
-    flex-grow: 1;
-  }
-  >main {
-    min-width: 1024px;
-    max-width: 1440px;
-    margin-top: 16px;
-    margin-bottom: 16px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 16px;
-    width: 100%;
-    align-self: center;
-  }
-}
+<style lang="scss" scoped>
 
-#resumeEditor {
-  min-width: 35%;
-  background: #444;
-}
-
-#resumePreview {
-  flex-grow: 1;
-  margin-left: 16px;
-  background: #777;
-}
-
-svg.icon {
-  height: 1em;
-  width: 1em;
-  fill: currentColor;
-  vertical-align: -0.1em;
-  font-size: 16px;
-}
-
-.button {
-  width: 72px;
-  height: 32px;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  background: #ddd;
-  color: #222;
-  text-decoration: none;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  vertical-align: middle;
-  &:hover {
-    box-shadow: 1px 1px 1px hsla(0, 0, 0, .5);
-  }
-  &.primary {
-    background: #02af5f;
-    color: white;
-  }
-  &.small {
-    height: 24px;
-    font-size: inherit;
-    width: auto;
-    padding-left: 1em;
-    padding-right: 1em;
-  }
-}
 </style>

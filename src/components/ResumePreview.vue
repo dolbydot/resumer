@@ -1,5 +1,7 @@
 <template>
     <div id="resumePreview">
+        <button class="button" @click="save">save</button>
+        <router-link class="button" to="/preview">preview</router-link>
         <section data-name="profile" v-if="resume.profile&&resume.profile.name">
             <h1>
                 {{resume.profile.name}}
@@ -74,6 +76,11 @@ export default {
             return this.$store.state.resume
         }
     },
+    methods: {
+        save() {
+            this.$store.dispatch('saveResume')
+        }
+    }
 }
 </script>
 
