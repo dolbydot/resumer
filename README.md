@@ -2,6 +2,9 @@
 
 > A Vue.js project
 
+## page
+https://dolbydot.github.io/resumer/dist/#/
+
 ## Build Setup
 
 ``` bash
